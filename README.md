@@ -13,4 +13,4 @@ cd multipole; make
 Copyright (C) 2025, Fredrik Jonsson, under GPLv3. See enclosed LICENSE.
 
 ## Location of master source code
-The source and documentation can be found at https://github.com/hp35/poincare
+The source and documentation can be found at https://github.com/hp35/multipole

@@ -1,0 +1,645 @@
+%
+% File: multipole/multipole.tex [plain TeX code]
+% Last change: December 26, 2022
+%
+% Derivation of the expressions for optically active polarization densities,
+% from the very basics of the multipole expansion.
+%
+% Copyright (C) 2022, Fredrik Jonsson
+%
+\input epsf
+\input eplain
+\font\ninerm=cmr9
+\font\twentyrm=cmr12 at 20 truept
+\font\twelvesc=cmcsc10 at 12 truept
+\input amssym % to get the {\Bbb E} font (strikethrough E)
+\def\document #1 {\hsize=150mm\hoffset=4.6mm\vsize=230mm\voffset=7mm
+  \topskip=0pt\baselineskip=12pt\parskip=0pt\leftskip=0pt\parindent=15pt
+  \headline={\ifnum\pageno>1\ifodd\pageno\rightheadline\else\leftheadline\fi
+    \else\hfill\fi}
+  \def\rightheadline{\tenrm{\it #1}
+    \hfil{\it\date}}
+  \def\leftheadline{\tenrm{\it\date}
+    \hfil{\it #1}}
+  \noindent~\vskip-60pt\hskip-40pt{\epsfbox{macros/UU_logo_color.eps}}
+  \vskip-42pt\hfill\vbox{\hbox{{\it\author}}
+  \hbox{{\it\date}}}\vskip 36pt
+  \centerline{\twelvesc #1}
+  \vskip 24pt\noindent}
+\def\section #1 {\medskip\goodbreak\noindent{\bf #1}
+  \par\nobreak\smallskip\noindent}
+\def\subsection #1 {\medskip\goodbreak\noindent{\it #1}
+  \par\nobreak\smallskip\noindent}
+\def\iint{\mathop{\int\kern-8pt\int}}
+\def\iiint{\mathop{\int\kern-8pt\int\kern-8pt\int}}
+\def\oiint{\mathop{\int\kern-8pt\int\kern-13.2pt{\bigcirc}}}
+\def\Re{\mathop{\rm Re}\nolimits} % real part
+\def\Im{\mathop{\rm Im}\nolimits} % imaginary part
+\def\Tr{\mathop{\rm Tr}\nolimits} % quantum mechanical trace
+\def\eqq{\mathop{\vbox{\hbox{\hskip2pt?}\vskip-6pt\hbox{=}}}}
+
+%
+% Define in which way we want displayed equation numbers to appear in
+% the text. In this case, it is preferred to have the equation numbers
+% as one single running index, rather than the form otherwise commonly
+% found format used in books, (<chapter number>.<equation number>).
+%
+\def\eqconstruct#1{#1}
+
+%
+% Define in which way we want displayed subequation numbers
+% to appear in the text.
+%
+\newcount\subref
+\def\eqsubreftext#1#2{%
+  \subref = #2           % The space stops a <number>.
+  \advance\subref by 96  % `a' is character code 97.
+  #1{\rm\char\subref}%
+}
+
+\def\date{December 26, 2022}
+\def\author{Fredrik Jonsson}
+\document{Multipole expansion and optically active nonlinear media}
+\vskip24pt
+
+\section{Outline}
+In this analysis, the path from the classical multipole expansion of the
+potentials over to the polarizability of the medium and interpretation of the
+multipole moments as individual contributing terms are as follows.
+\medskip
+\item{1.}{Derivation of the classical multipole expansion of the potentials due
+    to the fixed and static distribution of charge (say, in the classical
+    picture of molecule or antenna. This way, we once and for all define what
+    the {\it multipole moments} of the distribution is, say monopole, dipole,
+    quadrupole, etc. This is useful once we have the externally applied field
+    defined, and also particularly useful when it comes to expressing the
+    Hamiltonian for the energy stored by the various moments when placed in an
+    externally applied electric field. This expansion means expressing the
+    inverse distance $|{\bf x}-{\bf x}'|^{-1}$ as a Taylor series in the
+    expressions for the static potentials
+    $$
+      \Phi({\bf x})={{1}\over{4\pi\varepsilon_0}}
+        \iiint_{{\Bbb R}^3}{{\rho({\bf x}')}\over{|{\bf x}-{\bf x}'|}}\,dV',
+      \qquad
+      {\bf A}({\bf x})={{\mu_0}\over{4\pi}}
+        \iiint_{{\Bbb R}^3}{{{\bf J}({\bf x}')}\over{|{\bf x}-{\bf x}'|}}\,dV'.
+    $$
+    where $\Phi({\bf x})$ is the scalar potential and ${\bf A}({\bf x})$ the
+    vector potential. Just to summarize, this is the potentials due to the
+    charge and current distributions $\rho({\bf x})$ and ${\bf J}({\bf x})$
+    as such (and {\it not} the direct potentials from any externally applied
+    field).}
+\item{2.}{Expansion of the {\it externally applied} electromagnetic field, in
+    terms of a Taylor series around the charge distribution. In this case, the
+    starting point is the expression for stored energy,
+    $$
+      W=\iiint_{{\Bbb R}^3}\rho({\bf x})\Phi({\bf x})\,dV,
+    $$
+    in which we express the {\it externally applied} potential $\Phi({\bf x})$
+    as a Taylor series around a suitable center for the charge distribution
+    $\rho({\bf x})$. By interpreting the various-order multipole moments of the
+    charge distribution from the first step, we end up with a series of
+    {\it interaction} terms between the multipole moments and the externally
+    applied field.}
+\item{3.}{Going from the classical picture to the quantum-mechanical interaction with a classical (non-quantized) external field. We here move from the classically derived expression for the stored energy over to a picture in which we interpret the various multipole moments of the charge distribution as {\it quantum-mechanical operators}, that is to say taking the step
+$$
+  \eqalign{
+    H&=q\Phi(0)
+        -{\bf p}\cdot{\bf E}(0)
+        -\sum_i\sum_j Q_{ij}Q_{ij}{{\partial E_j(0)}\over{\partial x_i}}
+	-\ldots\cr
+  &\hskip10pt\to\quad
+    \hat{H}_{\rm I}=\hat{q}\Phi(0)
+        -\hat{\bf p}\cdot{\bf E}(0)
+	-\sum_i\sum_j \hat{Q}_{ij}\hat{Q}_{ij}{{\partial E_j(0)}\over{\partial x_i}}
+	-\ldots\cr
+  }
+$$}
+\medskip
+
+\section{Series expansion of the electrostatic potential from the charge
+         distribution}
+$$
+  \Phi({\bf x})={{1}\over{4\pi\varepsilon_0}}
+    \iiint_{{\Bbb R}^3}{{\rho({\bf x}')}\over{|{\bf x}-{\bf x}'|}}\,dV',
+$$
+$$
+  f({\bf x}')\equiv{{1}\over{|{\bf x}-{\bf x}'|}}
+    ={{1}\over{[(x-x')^2+(y-y')^2+(z-z')^2]^{1/2}}}
+$$
+$$
+  \eqalign{
+  f({\bf x}')&=
+    f({\bf x}')\big|_{{\bf x}'={\bf 0}}
+    +\sum_k x'_k
+      {{\partial f({\bf x}')}\over{\partial x'_k}}\bigg|_{{\bf x}'={\bf 0}}
+    +{{1}\over{2}}\sum_j\sum_k x'_j x'_k
+      {{\partial^2 f({\bf x}')}
+        \over{\partial x'_j\partial x'_k}}\bigg|_{{\bf x}'={\bf 0}}
+      \cr&\hskip100pt
+    +{{1}\over{6}}\sum_i\sum_j\sum_k x'_i x'_j x'_k
+      {{\partial^3 f({\bf x}')}
+        \over{\partial x'_i\partial x'_j\partial x'_k}}\bigg|_{{\bf x}'={\bf 0}}
+    +O(|{\bf x}'|^4)\cr
+  }
+$$
+$$
+  \eqalign{
+    f({\bf x}')\big|_{{\bf x}'={\bf 0}}&={{1}\over{|{\bf x}|}}\cr
+    {{\partial f({\bf x}')}\over{\partial x'_k}}\bigg|_{{\bf x}'={\bf 0}}
+      &={{x_k}\over{|{\bf x}|^3}}\cr
+    {{\partial^2 f({\bf x}')}
+      \over{\partial x'_j\partial x'_k}}\bigg|_{{\bf x}'={\bf 0}}
+        &={{3 x_j x_k - \delta_{jk}|{\bf x}|^2}\over{|{\bf x}|^5}}\cr
+    {{\partial^3 f({\bf x}')}
+      \over{\partial x'_i\partial x'_j\partial x'_k}}\bigg|_{{\bf x}'={\bf 0}}
+        &={{15 x_i x_j x_k - 3\varepsilon_{ijk}\delta_{jk}x_k|{\bf x}|^2}
+	   \over{|{\bf x}|^7}}\cr
+  }
+$$
+
+$$
+  \eqalign{
+  \Phi({\bf x})&={{1}\over{4\pi\varepsilon_0}}\bigg\{
+    {{1}\over{|{\bf x}|}}
+    \iiint_{{\Bbb R}^3}\rho({\bf x}')\,dV'
+    +\sum_k
+      {{x_k}\over{|{\bf x}|^3}}
+      \iiint_{{\Bbb R}^3}x'_k\rho({\bf x}')\,dV'
+      \cr&\hskip100pt
+    +{{1}\over{2}}\sum_j\sum_k
+      {{3 x_j x_k - \delta_{jk}|{\bf x}|^2}
+         \over{|{\bf x}|^5}}
+      \iiint_{{\Bbb R}^3} x'_j x'_k\rho({\bf x}')\,dV'
+      \cr&\hskip100pt
+    +{{1}\over{6}}\sum_i\sum_j\sum_k
+      {{15 x_i x_j x_k - 3\varepsilon_{ijk}\delta_{ij}x_k|{\bf x}|^2}
+         \over{|{\bf x}|^7}}
+      \iiint_{{\Bbb R}^3} x'_i x'_j x'_k\rho({\bf x}')\,dV'
+  \bigg\}\cr
+  }
+$$
+
+\section{Traceless form of the multipole moments}
+
+
+\section{Series expansion of the electrostatic potential of the externally
+         applied field}
+The electrostatically stored energy of a charge density $\rho({\bf x})$ in an
+externally applied scalar electric potential $\Phi_{\rm ext}({\bf x})$ is
+$$
+  W=\iiint_{{\Bbb R}^3}\rho({\bf x})\Phi_{\rm ext}({\bf x})\,dV
+$$
+The series expansion of the potential of the externally applied electric field
+is
+$$
+  \Phi_{\rm ext}({\bf x})
+    =\Phi_{\rm ext}({\bf 0})
+      +{{\partial \Phi_{\rm ext}({\bf 0})}\over{\partial x_k}} x_k
+      +{{1}\over{2}}{{\partial^2\Phi_{\rm ext}({\bf 0})}
+                \over{\partial x_j\partial x_k}} x_j x_k
+      +{{1}\over{6}}{{\partial^3\Phi_{\rm ext}({\bf 0})}
+                    \over{\partial x_i\partial x_j\partial x_k}} x_i x_j x_k
+      +O(|{\bf x}|^4)
+$$
+where multiple occurrences of indices $i,j,k$ are to be interpreted as sums,
+following the Einstein convention of summation, and where we should read the
+short-hand notation of the derivaties evaluated at the origo as
+$$
+  {{\partial \Phi_{\rm ext}({\bf 0})}\over{\partial x_k}}
+    \equiv{{\partial \Phi_{\rm ext}({\bf x})}\over{\partial x_k}}
+        \bigg|_{({\bf x}={\bf 0})},\qquad
+  {{\partial^2\Phi_{\rm ext}({\bf 0})}\over{\partial x_j\partial x_k}}
+  \equiv{{\partial^2\Phi_{\rm ext}({\bf x})}\over{\partial x_j\partial x_k}}
+        \bigg|_{({\bf x}={\bf 0})},
+  \qquad\hbox{etc.}
+$$
+Inserting the series expansion of the externally applied potential, the
+resulting stored energy hence becomes
+$$
+  W=\Phi_{\rm ext}({\bf 0})q
+    +p_k{{\partial \Phi_{\rm ext}({\bf 0})}\over{\partial x_k}}
+    +{{1}\over{2}}Q_{jk}{{\partial^2\Phi_{\rm ext}({\bf 0})}
+              \over{\partial x_j\partial x_k}}
+    +{{1}\over{6}}Q_{ijk}{{\partial^3\Phi_{\rm ext}({\bf 0})}
+                  \over{\partial x_i\partial x_j\partial x_k}}
+    +O(|{\bf x}|^4)
+$$
+where the net charge $q$ and the components of the dipole $p_k$, quadrupole
+$Q_{jk}$, and octopole $Q_{ijk}$ moments are defined by
+$$
+  \eqalign{
+   q\equiv\iiint_{{\Bbb R}^3}\rho({\bf x})\,dV,\quad
+   p_k\equiv\iiint_{{\Bbb R}^3}x_k\rho({\bf x})\,dV,\quad
+   Q_{jk}\equiv\iiint_{{\Bbb R}^3}x_j x_k\rho({\bf x})\,dV,\quad
+   Q_{ijk}\equiv\iiint_{{\Bbb R}^3}x_i x_j x_k\rho({\bf x})\,dV.
+  }
+$$
+Since the electric field strength is defined by the negative gradient of the
+scalar potential,
+$$
+  E_k = -{{\partial\Phi_{\rm ext}}\over{\partial x_k}},
+$$
+the stored energy is expressed in terms of the electric field strength as
+$$
+  W=\Phi_{\rm ext}({\bf 0})q
+    -p_k E_k({\bf 0})
+    -{{1}\over{2}}Q_{jk}{{\partial E_k({\bf 0})}\over{\partial x_j}}
+    -{{1}\over{6}}Q_{ijk}{{\partial^2 E_k({\bf 0})}
+                  \over{\partial x_i\partial x_j}}
+    +O(|{\bf x}|^4)
+$$
+
+\section{General multipole expansion}
+
+$$
+  \Phi({\bf x})=
+  \iiint_{{\Bbb R}^3}{{\rho({\bf x}')}\over{4\pi\varepsilon_0}}
+  \sum^{\infty}_{n=0}\sum^{n}_{k=0}(-2)^k{-1/2\choose n}{n\choose k}
+  {{|{\bf x}'|^{2(n-k)}({\bf x}'\cdot{\bf x})^k}\over{|{\bf x}|^{2n+1}}}\,dV'
+  \eqdef{eq:genexpansion10}
+$$
+
+\noindent{\bf Table 1.} List of terms occurring in the general multipole
+    expansion~\eqref{eq:genexpansion10} of the electrostatic scalar potential
+    due to a charge distribution $\rho({\bf x})$. Following the multipole
+    expansion formalism, the terms are grouped according to their power in
+    the distance to the observation point from the origo, of orders
+    $O(1/|{\bf x}|^{m+1})$ where $m=2n-k$.
+\smallskip\noindent
+\vbox{\offinterlineskip
+  \def\tableline#1#2#3#4#5#6{%
+    height4pt &\omit& &\omit& &\omit& &\omit& &\omit& &\omit&\cr
+    &#1& &#2& &#3& &#4& &#5& &#6&\cr
+    height4pt &\omit& &\omit& &\omit& &\omit& &\omit& &\omit&\cr}
+  \hrule
+  \halign{
+    &\vrule#&\strut\quad\hfil#\hfil\quad\cr
+    \tableline{\vbox{\hbox{Class for term}\vskip4pt\hbox{($2^m$-pole)}}}
+       {$m=2n-k$}
+       {$n$}{$k$}
+       {$\displaystyle{(-2)^k{-1/2\choose n}{n\choose k}}$}
+       {$\displaystyle{{{|{\bf x}'|^{2(n-k)}({\bf x}'\cdot{\bf x})^k}
+                        \over{|{\bf x}|^{2n+1}}}}$}
+    \noalign{\hrule}
+    \tableline{Monopole}{0}{0}{0}{1}{$1/|{\bf x}|$}
+    \noalign{\hrule}
+    \tableline{Dipole}{1}{1}{1}{1}
+       {${{{({\bf x}'\cdot{\bf x})}/{|{\bf x}|^3}}}$}
+    \noalign{\hrule}
+    \tableline{Quadrupole}{2}{1}{0}{$-1/2$}
+       {${{{|{\bf x}'|^2}/{|{\bf x}|^3}}}$}
+    \tableline{}{}{2}{2}{3/2}
+       {${{{({\bf x}'\cdot{\bf x})^2}/{|{\bf x}|^5}}}$}
+    \noalign{\hrule}
+    \tableline{Octopole}{3}{2}{1}{$-3/2$}
+       {${{{|{\bf x}'|^2({\bf x}'\cdot{\bf x})}/{|{\bf x}|^5}}}$}
+    \tableline{}{}{3}{3}{$5/2$}
+       {${{{({\bf x}'\cdot{\bf x})^3}/{|{\bf x}|^7}}}$}
+    \noalign{\hrule}
+    \tableline{Hexadecapole}{4}{2}{0}{$3/8$}
+       {${{{|{\bf x}'|^4}/{|{\bf x}|^5}}}$}
+    \tableline{}{}{3}{2}{$-15/4$}
+       {${{{|{\bf x}'|^2({\bf x}'\cdot{\bf x})^2}/{|{\bf x}|^7}}}$}
+    \tableline{}{}{4}{4}{$35/8$}
+       {${{{({\bf x}'\cdot{\bf x})^4}/{|{\bf x}|^9}}}$}
+    \noalign{\hrule}
+    \tableline{Dotriacontapole}{5}{3}{1}{$15/8$}
+       {${{{|{\bf x}'|^4({\bf x}'\cdot{\bf x})}/{|{\bf x}|^7}}}$}
+    \tableline{}{}{4}{3}{$-35/4$}
+       {${{{|{\bf x}'|^2({\bf x}'\cdot{\bf x})^3}/{|{\bf x}|^9}}}$}
+    \tableline{}{}{5}{5}{$63/8$}
+       {${{({\bf x}'\cdot{\bf x})^5}/{|{\bf x}|^{11}}}$}
+  }
+  \hrule
+}
+
+$$
+  \eqalign{
+    \Phi({\bf x})
+    &={{1}\over{4\pi\varepsilon_0}}
+      \sum^{\infty}_{n=0}\sum^{n}_{k=0}
+      (-2)^k{-1/2\choose n}{n\choose k}\iiint_{{\Bbb R}^3}
+      {{|{\bf x}'|^{2(n-k)}({\bf x}'\cdot{\bf x})^k}\over{|{\bf x}|^{2n+1}}}
+      \rho({\bf x}')\,dV'\cr
+    &={{1}\over{4\pi\varepsilon_0}}\bigg\{
+        \underbrace{
+          {{1}\over{|{\bf x}|}}\iiint_{{\Bbb R}^3}
+          \rho({\bf x}')\,dV'
+	}_{\hbox{monopole $\sim O(1/|{\bf x}|)$}}
+    \cr&\hskip50pt
+       +\underbrace{
+          {{1}\over{|{\bf x}|^3}}\iiint_{{\Bbb R}^3}
+          ({\bf x}'\cdot{\bf x})
+          \rho({\bf x}')\,dV'
+	}_{\hbox{dipole moment $\sim O(1/|{\bf x}|^2)$}}
+    \cr&\hskip50pt
+       +\underbrace{
+          {{1}\over{2|{\bf x}|^5}}\iiint_{{\Bbb R}^3}
+          \Big[3({\bf x}'\cdot{\bf x})^2-|{\bf x}'|^2|{\bf x}|^2\Big]
+          \rho({\bf x}')\,dV'
+	}_{\hbox{quadrupole moment $\sim O(1/|{\bf x}|^3)$}}
+    \cr&\hskip50pt
+       +\underbrace{
+          {{1}\over{2|{\bf x}|^7}}\iiint_{{\Bbb R}^3}
+          \Big[5({\bf x}'\cdot{\bf x})^2-3|{\bf x}'|^2|{\bf x}|^2\Big]
+          ({\bf x}'\cdot{\bf x})
+          \rho({\bf x}')\,dV'
+	}_{\hbox{octopole moment $\sim O(1/|{\bf x}|^4)$}}
+    \cr&\hskip50pt
+       +\underbrace{
+          {{1}\over{8|{\bf x}|^9}}\iiint_{{\Bbb R}^3}
+          \Big[
+	    35({\bf x}'\cdot{\bf x})^4
+	    -30|{\bf x}'|^2|{\bf x}|^2({\bf x}'\cdot{\bf x})^2
+	    +3|{\bf x}'|^4|{\bf x}|^4
+	  \Big]
+          \rho({\bf x}')\,dV'
+	}_{\hbox{hexadecapole moment $\sim O(1/|{\bf x}|^5)$}}
+    \cr&\hskip50pt
+       +\underbrace{
+          {{1}\over{8|{\bf x}|^{11}}}\iiint_{{\Bbb R}^3}
+          \Big[
+	    63({\bf x}'\cdot{\bf x})^4
+	    -70|{\bf x}'|^2|{\bf x}|^2({\bf x}'\cdot{\bf x})^2
+	    +15|{\bf x}'|^4|{\bf x}|^4
+	  \Big]({\bf x}'\cdot{\bf x})
+          \rho({\bf x}')\,dV'
+	}_{\hbox{dotriacontapole moment $\sim O(1/|{\bf x}|^6)$}}
+    \cr&\hskip50pt
+       +O(1/|{\bf x}|^7)
+      \bigg\}\cr
+    &=\sum^{\infty}_{m=0}\Phi^{(m)}({\bf x}),\cr
+  }
+$$
+where we defined the contributing multipole moments as follows, employing the
+Einstein convention of summation over repeated indices,
+$$
+  \eqalignno{
+    \Phi^{(0)}({\bf x})&\equiv{{1}\over{4\pi\varepsilon_0}}
+          {{1}\over{|{\bf x}|}}\iiint_{{\Bbb R}^3}
+          \rho({\bf x}')\,dV'&\cr
+    \Phi^{(1)}({\bf x})&\equiv{{1}\over{4\pi\varepsilon_0}}
+          {{x_k}\over{|{\bf x}|^3}}\iiint_{{\Bbb R}^3}
+          x'_k \rho({\bf x}')\,dV'&\cr
+    \Phi^{(2)}({\bf x})&\equiv{{1}\over{4\pi\varepsilon_0}}
+          {{1}\over{2|{\bf x}|^5}}
+          \Big[3 x_j x_k \iiint_{{\Bbb R}^3} x'_j x'_k \rho({\bf x}')\,dV'
+	  - x_j x_j \iiint_{{\Bbb R}^3} x'_k x'_k\ \rho({\bf x}'),dV' \Big]&\cr
+    &={{1}\over{4\pi\varepsilon_0}}
+          {{(3 x_j x_k - |{\bf x}|^2\delta_{jk})}\over{2|{\bf x}|^5}}
+	  \iiint_{{\Bbb R}^3} x'_j x'_k \rho({\bf x}')\,dV'&\cr
+  }
+$$
+We do here avoid using $m$ as subscript of the multipole terms $\Phi^{(m)}$ of
+the potential, in order not to confuse such an index with the elements of a
+vector.
+
+\section{Multipole expansion in terms of spherical harmonics -- moving to
+         traceless moments}
+$$
+  \Phi({\bf x})=\sum^{\infty}_{l=0}\sum^{l}_{m=-l}
+  {{4\pi}\over{2l+1}}q_{lm}{{Y_{lm}(\vartheta,\varphi)}\over{r^{l+1}}}
+$$
+
+\section{Hamiltonian in the interaction picture}
+Using the Einstein convention of summation, the Hamiltonian in the interaction
+picture with a classical, non-quantized field description, is
+$$
+  \hat{H}_{\rm I}(t) = -\hat{p}_{\alpha}E_{\alpha}(t)
+    -{{1}\over{2}}\hat{Q}_{\alpha\beta}
+       {{\partial E_{\alpha}(t)}\over{\partial x_{\beta}}}
+    -{{1}\over{6}}\hat{Q}_{\alpha\beta\gamma}
+       {{\partial^2 E_{\alpha}(t)}\over{\partial x_{\beta}\partial x_{\gamma}}}
+    -\hat{m}_{\alpha}B_{\alpha}(t)
+$$
+
+
+\section{Expressing solutions to Poissons equation in terms of spherical
+         harmonics}
+The spherical harmonic functions are well-known for providing solutions to the
+variable-separated form of Laplace equation, $\nabla^2\Phi=0$. However, they
+are also useful as a tool when expanding the electrostatic potential from a
+charge distribution $\rho({\bf x})$, for which
+$\nabla^2\Phi=\rho/\varepsilon_0$.
+
+\subsection{Solving Laplace's equation in spherical coordinates}
+Starting with the Laplace operator expressed in spherical
+coordinates\numberedfootnote{We here follow the ordering convention
+    $(r,\vartheta,\varphi)$ for the radial distance $r$, polar angle
+    $\vartheta\in[0,\pi]$ and azimuthal angle $\varphi\in[0,2\pi]$,
+    as recommended in the ISO 80000-2:2019 standard {\it Quantities
+    and units -- Part 2: Mathematics}, pp. 20--21. Item no. 2-17.3.}
+$(r,\vartheta,\varphi)$, for $0\le\vartheta\le\pi$ and $0\le\varphi\le2\pi$,
+$$
+  \nabla^2\Phi = {{1}\over{r^2}}{{\partial}\over{\partial r}}
+    \Big(r^2{{\partial\Phi}\over{\partial r}}\bigg)
+    +{{1}\over{r^2\sin^2\vartheta}}{{\partial^2\Phi}\over{\partial\varphi^2}}
+    +{{1}\over{r^2\sin\vartheta}}{{\partial}\over{\partial\vartheta}}
+      \Big(\sin\vartheta{{\partial\Phi}\over{\partial\vartheta}}\bigg),
+   \eqdef{eq:laplace10}
+$$
+we may for the Laplace equation $\nabla^2\Phi=0$ separate this by
+$$
+  \Phi(r,\varphi,\vartheta) = R(r)F(\varphi)T(\vartheta)
+  \eqdef{eq:laplace20}
+$$
+into\numberedfootnote{As a reference, see for example, Morse \& Feshbach,
+    {\it Methods of Theoretical Physics} (McGraw--Hill, New York, 1953),
+    Chapter 10, {\it Solutions of Laplace's and Poisson's Equations}, p.~1264.}
+$$
+  \eqalignno{
+    {{1}\over{R(r)}}{{\partial}\over{\partial r}}
+      \Big(r^2{{\partial R(r)}\over{\partial r}}\bigg)&=\lambda=\hbox{const.},
+      \eqdefn{eq:laplace30}&\eqsubdef{eq:laplace30a}\cr
+    {{1}\over{F(\varphi)}}{{\partial^2 F(\varphi)}\over{\partial\varphi^2}}
+    &=-m^2=\hbox{const.}&\eqsubdef{eq:laplace30b}\cr
+    {{\sin\vartheta}\over{T(\vartheta)}}
+      {{\partial}\over{\partial\vartheta}}
+      \Big(\sin\vartheta{{\partial T(\vartheta)}\over{\partial\vartheta}}\bigg)
+        +\lambda\sin^2\vartheta&=m^2.
+    &\eqsubdef{eq:laplace30c}\cr
+  }
+$$
+We here chose the sign of $-m^2$ and its ``pre-squared'' form already from the
+knowledge that $F(\varphi)$ must be a periodic (non-exponential) function, and
+that we know that we at some point will use the square root of the constant
+when solving the second-order linear ODE. To start with,
+Eq.~\eqref{eq:laplace30b} is easily integrated to yield
+$$
+  F_m(\varphi)=C_m\exp(im\varphi)+D_m\exp(-im\varphi),
+$$
+where $C_m$ and $D_m$ are constants, and where we for the sake of clarity in
+notation added an explicit index on $F_m(\varphi)$. Since $F_m(\varphi)$ must
+be a periodic function with a maximum period of $2\pi$, this implies that $m$
+must be an integer. Due to the presence of positive as well as negative
+exponent in the general solution for $F_m(\varphi)$, we may without lack of
+generality remove this redundancy to have the solution for the azimuthal
+dependence expressed as
+$$
+  F_m(\varphi)=C_m\exp(im\varphi),\qquad m=\ldots,-2,-1,0,1,2,\ldots
+$$
+Evaluation of $F_m(\varphi)$ over $0\le\varphi\le2\pi$ then immediately yields
+that these solutions indeed are orthogonal,
+$$
+  \int^{2\pi}_0 F_m(\varphi)F_{m'}(\varphi)\,\varphi
+    = C_m C_{m'}2\pi\delta_{mm'},
+$$
+though by further applying the requirement that they in addition should be
+orthonormal, in which case we relieve the constants $C_m$ from any boundary
+conditions, instead lifting this over to the integration constants of other
+factors in the variable separation of Eq.~\eqref{eq:laplace20}, we require
+that $C_m=(2\pi)^{-1/2}$, and that hence
+$$
+  F_m(\varphi)={{1}\over{\sqrt{2\pi}}}\exp(im\varphi),
+  \qquad m=\ldots,-2,-1,0,1,2,\ldots
+  \eqdef{eq:laplace40}
+$$
+The requirement on $m$ being an integer then leads to Eq.~\eqref{eq:laplace30c}
+taking the Sturm-Liouville form
+$$
+  {{1}\over{\sin\vartheta}}
+    {{\partial}\over{\partial\vartheta}}
+    \Big(\sin\vartheta{{\partial T(\vartheta)}\over{\partial\vartheta}}\bigg)
+    +\Big(\lambda - {{m^2}\over{\sin^2\vartheta}}\Big)T(\vartheta)=0.
+  \eqdef{eq:laplace50}
+$$
+Due to the presence of $\sin\vartheta$ in the denominators, this ODE is
+singular at $\vartheta=0$ and $\vartheta=\pi$, something we in just a moment
+will address when it comes to constants of integration. Changing variable to
+$\xi=\cos\vartheta$, with $0\le\xi\le1$, we then have
+$$
+  {{\partial}\over{\partial\xi}}
+    =-{{1}\over{\sin\vartheta}}{{\partial}\over{\partial\vartheta}},
+$$
+and Eq.~\eqref{eq:laplace50} hence takes the form of {\it Legendre's associated}
+ordinary differential equation as
+$$
+  (1-\xi^2){{\partial^2 T(\xi)}\over{\partial\xi^2}}
+  -2\xi{{\partial T(\xi)}\over{\partial\xi}}
+    +\Big(\lambda - {{m^2}\over{1-\xi^2}}\Big)T(\xi)=0.
+  \eqdef{eq:laplace60}
+$$
+Whenever $\lambda=n(n+1)$ with $n\ge m$ is an integer, Legendre's associated
+equation has the general solution $T(\xi)=aP^m_n(\xi)+bQ^m_n(\xi)$, where $a$
+and $b$ are constants and where $P^m_n(\xi)$ and $Q^m_n(\xi)$ are the respective
+first and second kind associated Legendre functions of degree $n$ and order $m$.
+
+Due to the fact that $Q^m_n(\xi)$ is unbounded at $\xi=1$ and $\xi=-1$ (that is
+to say, at polar angles $\vartheta=0$ and $\vartheta=\pi$, respectively), the
+requirement of a bounded solution hence yields the requirement that $b=0$. The
+bounded {\it orthonormal} eigenfunctions\numberedfootnote{For the computation
+    of the normalization factor, see for example D.~D.~Trim {\it Applied
+    Partial Differential Equations} (PWS-Kent, Boston, 1990), Section 8.6,
+    {\it Sturm-Liouville Systems and Legendre's Differential Equation.}}
+of the Sturm-Loiuville system of Eq.~\eqref{eq:laplace50} are hence, after
+some algebra and by explicitly indexing the eigenfunctions,
+$$
+  T_{nm}(\vartheta)=
+    \sqrt{{{(2n+1)(n-m)!}\over{2(n+m)!}}}P^m_n(\cos\vartheta).
+  \eqdef{eq:laplace70}
+$$
+With this form of coefficient, it is straightforward albeit somewhat cumbersome
+to verify that the orthonormality of $T_{mn}(\vartheta)$ yields
+$$
+  \int^{\pi}_0
+    T_{nm}(\vartheta) T_{n'm'}(\vartheta)\sin\vartheta
+  \,d\vartheta
+  =\delta_{nn'}\delta_{mm'}
+$$
+Again, by imposing orthonormality on $T_{nm}(\vartheta)$, we effectively
+relieve the coefficients from being used to match requirements imposed by
+boundary conditions, and we have hence left this to the integration constants
+which finally will appear for the radial factor $R(r)$.
+
+Finally, using that $\lambda=n(n+1)$ from the conclusion of the Sturm-Liouville
+form of the equation for $T(\vartheta)$, Eq.~\eqref{eq:laplace30a} becomes
+$$
+  {{\partial}\over{\partial r}}
+    \Big(r^2{{\partial R(r)}\over{\partial r}}\bigg)-n(n+1)R(r)=0.
+  \eqdef{eq:laplace80}
+$$
+From the shape of this equation, in particular with its terms of the form
+$$
+  r^2{{\partial^2 R}\over{\partial r^2}},\quad
+  r{{\partial R}\over{\partial r}},\quad\hbox{and}\quad R,
+$$
+we may immediately conclude that the general solution must be a polynomial in
+$r$, and we can directly integrate the radial equation to yield
+$$
+  R_n(r)=A_n r^n + B_n r^{-(n+1)},
+  \eqdef{eq:laplace90}
+$$
+where $A_n$ and $B_n$ are constants. As the solution for $R_n(r)$ here stands,
+we should keep in mind that the constants $A_n$ and $B_n$ in fact implicitly
+also depend on the index $m$, as we have normalized the factors $F_m(\varphi)$
+and $T_{nm}(\vartheta)$. Thus, by combining the solutions for the factors
+$F_m(\varphi)$, $T_{mn}(\vartheta)$ and $R_n(r)$, of Eqs.~\eqref{eq:laplace40},
+\eqref{eq:laplace70} and \eqref{eq:laplace90}, respectively, into the form
+$\Phi(r,\varphi,\vartheta) = R(r)F(\varphi)T(\vartheta)$ used for the variable
+separation, we arrive at the solution\numberedfootnote{Notice that
+    J.~D.~Jackson, {\it Classical Electrodynamics} (Wiley, New York, 1975),
+    2nd Edn., Eqs.~(3.2) and (3.8), in the treatise on Laplace's equation
+    in spherical coordinates already in the separation of variables assume
+    an inverse radial dependence, as
+    $$
+      \Phi(r,\varphi,\vartheta) = {{R(r)}\over{r}}F(\varphi)T(\vartheta),
+    $$
+    hence providing a slightly more elegant solution as
+    $$
+      \Phi(r,\vartheta,\varphi) = \sum^{\infty}_{n=0}\sum^{n}_{m=0}
+        (A_{nm} r^{n+1} + B_{nm} r^{-n)})Y_{nm}(\vartheta,\varphi).
+    $$}
+$$
+  \Phi(r,\vartheta,\varphi) = \sum^{\infty}_{n=0}\sum^{n}_{m=-n}
+  (A_{nm} r^n + B_{nm} r^{-(n+1)})Y_{nm}(\vartheta,\varphi)
+  \eqdef{eq:laplace100}
+$$
+where\numberedfootnote{We may here recall that the ``$4\pi$'' in the
+    denominator of the square root stems from the $(2\pi)^{-1/2}$ occurring
+    in the azimuthal normalization of $F_m(\varphi)$, multiplied by the ``$2$''
+    in the denominator of the normalization constant of $T_{mn}(\vartheta)$.}
+$$
+  Y_{nm}(\vartheta,\varphi)\equiv
+  \sqrt{{{(2n+1)(n-m)!}\over{4\pi(n+m)!}}}\exp(im\varphi)P^m_n(\cos\vartheta)
+  \eqdef{eq:laplace110}
+$$
+are the orthonormal spherical harmonic functions,\numberedfootnote{Morse \&
+    Feshbach, {\it Methods of Theoretical Physics} (McGraw--Hill, New York,
+    1953), Chapter 10, {\it Solutions of Laplace's and Poisson's Equations},
+    p.~1264. See also Jackson ({\it ibid.}), Eq.~(3.53).}
+here listed with the arguments in order $(\vartheta,\varphi)$ to conform with
+the commonly used convention of notation. The orthonormal condition on
+$Y_{nm}(\vartheta,\varphi)$ over the entire enclosing sphere is from the
+previously stated orthonormality conditions on $T_{nm}(\vartheta)$ and
+$F_m(\varphi)$ easily verified to yield
+$$
+  \eqalign{
+  \int^{\pi}_0
+    \int^{2\pi}_0
+      &Y_{nm}(\vartheta,\varphi) Y^*_{n'm'}(\vartheta,\varphi)\sin\vartheta
+    \,d\varphi
+  \,d\vartheta
+  \cr
+  &=\int^{\pi}_0
+      \int^{2\pi}_0
+        T_{nm}(\vartheta)F_m(\varphi)
+	\bigg(
+          T_{n'm'}(\vartheta)F_{m'}(\varphi)
+	\bigg)^*
+	\sin\vartheta
+      \,d\varphi
+    \,d\vartheta\cr
+  &=\underbrace{
+      \int^{2\pi}_0 F_m(\varphi) F^*_{m'}(\varphi)\,d\varphi
+      }_{=\delta_{mm'}}
+    \underbrace{
+      \int^{\pi}_0
+        T_{nm}(\vartheta) T^*_{n'm'}(\vartheta) \sin\vartheta
+      \,d\vartheta
+    }_{=\delta_{nn'}\delta_{mm'}}\cr
+  &=\delta_{nn'}\delta_{mm'}\cr
+  }
+$$
+
+\bye
